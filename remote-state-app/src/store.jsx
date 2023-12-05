@@ -1,15 +1,10 @@
 import create from "zustand";
+import useIncrementStore from "./store/incrementStore";
+import useApiDataStore from "./store/apiDataStore";
 
-const useStore = create((set) => ({
-  count: 1,
-  apiData: {
-    data: null,
-    loading: true,
-    error: false,
-  },
-  increment: () => set((state) => ({ count: state.count + 1 })),
-  clear: () => set(() => ({ count: 0 })),
-  updateApiData: (key, value) => set((state) => ({ ...state, [key]: value })),
+export const useBoundStore = create((...a) => ({
+  ...useIncrementStore(...a),
+  ...useApiDataStore(...a),
 }));
 
-export default useStore;
+export default useBoundStore;
