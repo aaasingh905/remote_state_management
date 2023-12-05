@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import useStore from "remotestate/store";
 
@@ -41,8 +41,8 @@ export default () => {
         borderBottom: "2px solid #fb8500",
       }}
     >
-      <div class="flex-grow">State Management</div>
-      <div class="flex-grow">
+      <div className="flex-grow">State Management</div>
+      <div className="flex-grow">
         Header App {data?.[0]?.API && <span>({data?.[0]?.API})</span>}
       </div>
       <div>
