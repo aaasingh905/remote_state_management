@@ -6,12 +6,35 @@ import useStore from "remotestate/store";
 import "./index.scss";
 
 const App = () => {
-  const { count, increment } = useStore();
+  const {
+    count,
+    increment,
+    apiData: { data = null, loading = false, error = false },
+    updateApiData,
+  } = useStore();
   useEffect(() => {
-    axios.get("https://api.publicapis.org/random").then((res) => {
-      console.log(res, "***");
-    });
-  }, []);
+    if (!data && !loading) {
+      axios
+        .get("https://api.publicapis.org/random")
+        .then((res) => {
+          if (res?.status === 200) {
+            updateApiData("apiData", {
+              data: res?.data?.entries,
+              loading: false,
+              error: false,
+            });
+          }
+        })
+        .catch((err) =>
+          updateApiData("apiData", {
+            data: null,
+            loading: false,
+            error: true,
+          })
+        );
+    }
+  }, [data, loading, error]);
+
   return (
     <div className="text-xl mx-auto max-w-6xl">
       <Header />
@@ -26,9 +49,22 @@ const App = () => {
           Add
         </button>
       </div>
-      {/* <div> */}
-
-      {/* </div> */}
+      {data && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "lightGreen",
+            marginTop: "10px",
+          }}
+        >
+          <h3>API Response</h3>
+          <span>API : {data?.[0]?.API}</span>
+          <span>Description : {data?.[0]?.Description}</span>
+        </div>
+      )}
     </div>
   );
 };
